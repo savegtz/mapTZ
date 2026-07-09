@@ -1,0 +1,12 @@
+{
+  "name": "PWA AR Navigation Guide",
+  "description": "Mobile-first augmented reality navigation application. Select locations on Google Maps, generate QR codes, scan to open the AR camera, and navigate with real-time 3D pointers, GPS tracking, and Gemini AI voice instructions.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
