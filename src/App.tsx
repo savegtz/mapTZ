@@ -7,6 +7,7 @@ import MapSelector from "./components/MapSelector";
 import ARCamera from "./components/ARCamera";
 import LocationCard from "./components/LocationCard";
 import VoiceAssistant from "./components/VoiceAssistant";
+import MainMap from "./components/MainMap";
 
 export default function App() {
   const [pins, setPins] = useState<LocationPin[]>([]);
@@ -256,6 +257,14 @@ export default function App() {
                 )}
               </div>
             </div>
+
+            {/* Main Interactive Map (Standard / Satellite Toggle) */}
+            <MainMap
+              pins={filteredPins}
+              currentGPS={currentGPS}
+              onNavigate={(selected) => setActiveNavPin(selected)}
+              userLanguage={lang}
+            />
 
             {/* Search filter */}
             <div className="relative">
