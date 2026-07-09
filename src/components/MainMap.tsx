@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow, useAdvancedMarkerRef } from "@vis.gl/react-google-maps";
-import { Compass, Layers, Globe, Settings, MapPin, Sparkles, AlertTriangle, X, ZoomIn, ZoomOut, Target } from "lucide-react";
+import { Compass, Layers, Globe, Settings, MapPin, Sparkles, AlertTriangle, X, ZoomIn, ZoomOut, Target, Utensils, ShoppingCart, Ticket, Pill } from "lucide-react";
 import { LocationPin } from "../types";
 import { calculateDistance } from "../utils/geo";
 
@@ -114,7 +114,7 @@ export default function MainMap({
   userLanguage = "sw" 
 }: MainMapProps) {
   const [mapType, setMapType] = useState<"roadmap" | "satellite">("roadmap");
-  const [mapCenter, setMapCenter] = useState({ lat: -6.8115, lng: 39.2515 }); // Centered around Tabata, Dar es Salaam
+  const [mapCenter, setMapCenter] = useState({ lat: -6.7214, lng: 39.1913 }); // Centered around Goba, Dar es Salaam
   const [showSetupInstructions, setShowSetupInstructions] = useState(false);
 
   // Demo interactive states
@@ -126,67 +126,88 @@ export default function MainMap({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [selectedDemoPin, setSelectedDemoPin] = useState<LocationPin | null>(null);
 
-  // Set up demo pins fallback if user has no pins yet (exactly matching user's uploaded Dar es Salaam map screenshot)
+  // Set up category filter state
+  const [selectedCategory, setSelectedCategory] = useState<"ZOTE" | "CHAKULA" | "SOKO" | "TIKETI" | "DAWA">("ZOTE");
+
+  // Set up demo pins fallback if user has no pins yet (exactly matching user's uploaded Goba map screenshot)
   const activePins = pins.length > 0 ? pins : [
     {
-      id: "demo-loyola",
-      name: "Loyola High School",
-      latitude: -6.7972,
-      longitude: 39.2458,
-      description: userLanguage === "sw" ? "Shule maarufu ya sekondari ya Loyola iliyopo Kigogo/Kurasini Road." : "Loyola High School, a well-known secondary school in Kigogo area.",
-      isBusiness: false,
-      timestamp: Date.now()
-    },
-    {
-      id: "demo-dampo",
-      name: "Tabata Dampo",
-      latitude: -6.8093,
-      longitude: 39.2455,
-      description: userLanguage === "sw" ? "Kituo kikuu na makutano ya barabara ya Nelson Mandela." : "Major transit junction and bus stop along Nelson Mandela Road.",
+      id: "demo-cakezonetz",
+      name: "Cakezonetz",
+      latitude: -6.7198,
+      longitude: 39.1905,
+      description: userLanguage === "sw" ? "Duka la keki na mikate tamu, Goba. Agiza keki za sherehe hapa." : "Delicious cakes and bakery shop in Goba.",
       isBusiness: true,
-      businessCategory: userLanguage === "sw" ? "Kituo / Usafiri" : "Transit / Bus Stop",
-      timestamp: Date.now()
+      businessCategory: "CHAKULA",
+      createdAt: Date.now()
     },
     {
-      id: "demo-sheli",
-      name: "Buguruni Sheli",
-      latitude: -6.8228,
-      longitude: 39.2618,
-      description: userLanguage === "sw" ? "Kituo maarufu cha mafuta na biashara za rejareja Buguruni." : "Bustling Buguruni junction and fueling station.",
+      id: "demo-mathy-chips",
+      name: "Mathy chips",
+      latitude: -6.7248,
+      longitude: 39.1895,
+      description: userLanguage === "sw" ? "Chipsi tamu, kuku choma na vinywaji baridi Goba." : "Local fast food spot serving fresh chips and roast chicken.",
       isBusiness: true,
-      businessCategory: userLanguage === "sw" ? "Kituo cha Huduma" : "Service Station",
-      timestamp: Date.now()
+      businessCategory: "CHAKULA",
+      createdAt: Date.now()
     },
     {
-      id: "demo-quality-center",
-      name: "Quality Center Mall",
-      latitude: -6.8296,
-      longitude: 39.2612,
-      description: userLanguage === "sw" ? "Jengo kubwa la maduka kando ya barabara ya Nyerere." : "Major shopping and commercial center along Nyerere Road.",
+      id: "demo-somewhere-hq",
+      name: "SOMEWHERE HQ",
+      latitude: -6.7202,
+      longitude: 39.1965,
+      description: userLanguage === "sw" ? "Ofisi kuu ya Somewhere, huduma za kibiashara na teknolojia." : "Headquarters of Somewhere services and technology.",
       isBusiness: true,
-      businessCategory: userLanguage === "sw" ? "Manunuzi / Mall" : "Shopping Mall",
-      timestamp: Date.now()
+      businessCategory: "SOKO",
+      createdAt: Date.now()
     },
     {
-      id: "demo-kigogo",
-      name: "Kigogo Mwisho",
-      latitude: -6.8021,
-      longitude: 39.2575,
-      description: userLanguage === "sw" ? "Kituo kikubwa cha mabasi ya daladala kando ya mto Msimbazi." : "Bustling local bus stop and market zone near the river.",
-      isBusiness: false,
-      timestamp: Date.now()
-    },
-    {
-      id: "demo-sigara",
-      name: "Tabata Sigara",
-      latitude: -6.8188,
-      longitude: 39.2315,
-      description: userLanguage === "sw" ? "Eneo maarufu la viwanda vidogo na makazi ya watu." : "Popular residential and light industrial suburb of Tabata.",
+      id: "demo-serene-apts",
+      name: "Goba Serene Apartments",
+      latitude: -6.7275,
+      longitude: 39.1942,
+      description: userLanguage === "sw" ? "Apartment za kisasa na tulivu kwa malazi Goba." : "Modern and serene rental apartments in Goba.",
       isBusiness: true,
-      businessCategory: userLanguage === "sw" ? "Eneo la Burudani" : "Entertainment Spot",
-      timestamp: Date.now()
+      businessCategory: "TIKETI",
+      createdAt: Date.now()
+    },
+    {
+      id: "demo-msangai-market",
+      name: "MSANGAI MINI SUPER MARKET",
+      latitude: -6.7320,
+      longitude: 39.1950,
+      description: userLanguage === "sw" ? "Supermarket ndogo yenye bidhaa zote za nyumbani na chakula." : "Mini supermarket with a wide range of groceries and home needs.",
+      isBusiness: true,
+      businessCategory: "SOKO",
+      createdAt: Date.now()
+    },
+    {
+      id: "demo-goba-dawa",
+      name: "Goba Pharmacy / Dawa",
+      latitude: -6.7230,
+      longitude: 39.1870,
+      description: userLanguage === "sw" ? "Duka la dawa lililo wazi masaa 24 karibu na barabara kuu." : "24/7 modern pharmacy providing health prescriptions.",
+      isBusiness: true,
+      businessCategory: "DAWA",
+      createdAt: Date.now()
+    },
+    {
+      id: "demo-goba-tiketi",
+      name: "Goba Plaza / Tiketi Depot",
+      latitude: -6.7260,
+      longitude: 39.1980,
+      description: userLanguage === "sw" ? "Kituo cha kukata tiketi za mabasi, ndege na matukio ya burudani." : "Ticket booking desk for transit, flights and local events.",
+      isBusiness: true,
+      businessCategory: "TIKETI",
+      createdAt: Date.now()
     }
   ];
+
+  // Filter pins based on category
+  const filteredPins = (pins.length > 0 ? pins : activePins).filter(pin => {
+    if (selectedCategory === "ZOTE") return true;
+    return pin.businessCategory === selectedCategory;
+  });
 
   // Adjust center based on current GPS or available pins
   useEffect(() => {
@@ -415,7 +436,7 @@ export default function MainMap({
                 </AdvancedMarker>
               )}
 
-              {pins.map((pin) => (
+              {filteredPins.map((pin) => (
                 <MarkerWithInfoWindow
                   key={pin.id}
                   pin={pin}
@@ -426,6 +447,97 @@ export default function MainMap({
               ))}
             </Map>
           </APIProvider>
+
+          {/* Dynamic Swahili Categories Floating Filter Bar */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-md rounded-full shadow-2xl p-1 flex items-center gap-1 border border-slate-200/80 z-25 max-w-[90%] overflow-x-auto scrollbar-none select-none">
+            {/* ZOTE (All) */}
+            <button
+              onClick={() => {
+                setSelectedCategory("ZOTE");
+                setSelectedDemoPin(null);
+              }}
+              className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer shrink-0 ${
+                selectedCategory === "ZOTE"
+                  ? "bg-slate-950 text-white shadow-md scale-105"
+                  : "text-slate-700 hover:bg-slate-100/70 hover:text-slate-950"
+              }`}
+            >
+              <Layers className="w-3 h-3" />
+              <span>{userLanguage === "sw" ? "ZOTE" : "ALL"}</span>
+            </button>
+
+            {/* CHAKULA */}
+            <button
+              onClick={() => {
+                setSelectedCategory("CHAKULA");
+                setSelectedDemoPin(null);
+              }}
+              className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer shrink-0 ${
+                selectedCategory === "CHAKULA"
+                  ? "bg-slate-950 text-white shadow-md scale-105"
+                  : "text-slate-700 hover:bg-slate-100/70 hover:text-slate-950"
+              }`}
+            >
+              <div className="w-4.5 h-4.5 rounded-full bg-rose-100 flex items-center justify-center shrink-0">
+                <Utensils className="w-2.5 h-2.5 text-rose-500" />
+              </div>
+              <span>{userLanguage === "sw" ? "CHAKULA" : "FOOD"}</span>
+            </button>
+
+            {/* SOKO */}
+            <button
+              onClick={() => {
+                setSelectedCategory("SOKO");
+                setSelectedDemoPin(null);
+              }}
+              className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer shrink-0 ${
+                selectedCategory === "SOKO"
+                  ? "bg-slate-950 text-white shadow-md scale-105"
+                  : "text-slate-700 hover:bg-slate-100/70 hover:text-slate-950"
+              }`}
+            >
+              <div className="w-4.5 h-4.5 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+                <ShoppingCart className="w-2.5 h-2.5 text-emerald-500" />
+              </div>
+              <span>{userLanguage === "sw" ? "SOKO" : "MARKET"}</span>
+            </button>
+
+            {/* TIKETI */}
+            <button
+              onClick={() => {
+                setSelectedCategory("TIKETI");
+                setSelectedDemoPin(null);
+              }}
+              className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer shrink-0 ${
+                selectedCategory === "TIKETI"
+                  ? "bg-slate-950 text-white shadow-md scale-105"
+                  : "text-slate-700 hover:bg-slate-100/70 hover:text-slate-950"
+              }`}
+            >
+              <div className="w-4.5 h-4.5 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                <Ticket className="w-2.5 h-2.5 text-amber-500" />
+              </div>
+              <span>{userLanguage === "sw" ? "TIKETI" : "TICKETS"}</span>
+            </button>
+
+            {/* DAWA */}
+            <button
+              onClick={() => {
+                setSelectedCategory("DAWA");
+                setSelectedDemoPin(null);
+              }}
+              className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer shrink-0 ${
+                selectedCategory === "DAWA"
+                  ? "bg-slate-950 text-white shadow-md scale-105"
+                  : "text-slate-700 hover:bg-slate-100/70 hover:text-slate-950"
+              }`}
+            >
+              <div className="w-4.5 h-4.5 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                <Pill className="w-2.5 h-2.5 text-blue-500" />
+              </div>
+              <span>{userLanguage === "sw" ? "DAWA" : "PHARMACY"}</span>
+            </button>
+          </div>
         </div>
       ) : (
         /* High-fidelity Fallback Interactive Simulator Map with Drag & Pan */
@@ -526,11 +638,37 @@ export default function MainMap({
           })()}
 
           {/* Render Pin Markers */}
-          {activePins.map((pin) => {
+          {filteredPins.map((pin) => {
             const pos = getScreenCoords(pin.latitude, pin.longitude);
 
             if (pos.x < -40 || pos.x > dims.width + 40 || pos.y < -40 || pos.y > dims.height + 40) {
               return null;
+            }
+
+            // Custom pin background and icon styling depending on Swahili category
+            let pinBg = "bg-blue-600 text-white border-blue-400";
+            let pulseBg = "bg-blue-600/35";
+            let PinIcon = MapPin;
+
+            if (pin.businessCategory === "CHAKULA") {
+              pinBg = "bg-rose-500 text-white border-rose-400";
+              pulseBg = "bg-rose-500/35";
+              PinIcon = Utensils;
+            } else if (pin.businessCategory === "SOKO") {
+              pinBg = "bg-emerald-500 text-white border-emerald-400";
+              pulseBg = "bg-emerald-500/35";
+              PinIcon = ShoppingCart;
+            } else if (pin.businessCategory === "TIKETI") {
+              pinBg = "bg-amber-500 text-slate-950 border-amber-400";
+              pulseBg = "bg-amber-500/35";
+              PinIcon = Ticket;
+            } else if (pin.businessCategory === "DAWA") {
+              pinBg = "bg-blue-500 text-white border-blue-400";
+              pulseBg = "bg-blue-500/35";
+              PinIcon = Pill;
+            } else if (pin.isBusiness) {
+              pinBg = "bg-cyan-500 text-slate-950 border-cyan-400";
+              pulseBg = "bg-cyan-500/35";
             }
 
             return (
@@ -541,9 +679,9 @@ export default function MainMap({
                 style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
               >
                 <div className="relative flex items-center justify-center">
-                  <div className={`absolute w-7 h-7 rounded-full ${pin.isBusiness ? "bg-cyan-500/35 animate-pulse" : "bg-blue-500/35 animate-pulse"} opacity-80`}></div>
-                  <div className={`w-5.5 h-5.5 rounded-full ${pin.isBusiness ? "bg-cyan-500 text-slate-950 border-cyan-400" : "bg-blue-500 text-white border-blue-400"} border-2 flex items-center justify-center shadow-lg relative z-10`}>
-                    <MapPin className="w-3.5 h-3.5" />
+                  <div className={`absolute w-7 h-7 rounded-full ${pulseBg} animate-pulse opacity-80`}></div>
+                  <div className={`w-5.5 h-5.5 rounded-full ${pinBg} border-2 flex items-center justify-center shadow-lg relative z-10`}>
+                    <PinIcon className="w-3 h-3" />
                   </div>
                 </div>
                 <span className="mt-1 px-1.5 py-0.5 rounded-md bg-slate-950/85 border border-slate-800 text-[9px] font-black tracking-wider uppercase text-slate-200 shadow-md whitespace-nowrap">
@@ -613,6 +751,97 @@ export default function MainMap({
               </div>
             );
           })()}
+
+          {/* Dynamic Swahili Categories Floating Filter Bar */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-md rounded-full shadow-2xl p-1 flex items-center gap-1 border border-slate-200/80 z-25 max-w-[90%] overflow-x-auto scrollbar-none select-none">
+            {/* ZOTE (All) */}
+            <button
+              onClick={() => {
+                setSelectedCategory("ZOTE");
+                setSelectedDemoPin(null);
+              }}
+              className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer shrink-0 ${
+                selectedCategory === "ZOTE"
+                  ? "bg-slate-950 text-white shadow-md scale-105"
+                  : "text-slate-700 hover:bg-slate-100/70 hover:text-slate-950"
+              }`}
+            >
+              <Layers className="w-3 h-3" />
+              <span>{userLanguage === "sw" ? "ZOTE" : "ALL"}</span>
+            </button>
+
+            {/* CHAKULA */}
+            <button
+              onClick={() => {
+                setSelectedCategory("CHAKULA");
+                setSelectedDemoPin(null);
+              }}
+              className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer shrink-0 ${
+                selectedCategory === "CHAKULA"
+                  ? "bg-slate-950 text-white shadow-md scale-105"
+                  : "text-slate-700 hover:bg-slate-100/70 hover:text-slate-950"
+              }`}
+            >
+              <div className="w-4.5 h-4.5 rounded-full bg-rose-100 flex items-center justify-center shrink-0">
+                <Utensils className="w-2.5 h-2.5 text-rose-500" />
+              </div>
+              <span>{userLanguage === "sw" ? "CHAKULA" : "FOOD"}</span>
+            </button>
+
+            {/* SOKO */}
+            <button
+              onClick={() => {
+                setSelectedCategory("SOKO");
+                setSelectedDemoPin(null);
+              }}
+              className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer shrink-0 ${
+                selectedCategory === "SOKO"
+                  ? "bg-slate-950 text-white shadow-md scale-105"
+                  : "text-slate-700 hover:bg-slate-100/70 hover:text-slate-950"
+              }`}
+            >
+              <div className="w-4.5 h-4.5 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+                <ShoppingCart className="w-2.5 h-2.5 text-emerald-500" />
+              </div>
+              <span>{userLanguage === "sw" ? "SOKO" : "MARKET"}</span>
+            </button>
+
+            {/* TIKETI */}
+            <button
+              onClick={() => {
+                setSelectedCategory("TIKETI");
+                setSelectedDemoPin(null);
+              }}
+              className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer shrink-0 ${
+                selectedCategory === "TIKETI"
+                  ? "bg-slate-950 text-white shadow-md scale-105"
+                  : "text-slate-700 hover:bg-slate-100/70 hover:text-slate-950"
+              }`}
+            >
+              <div className="w-4.5 h-4.5 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                <Ticket className="w-2.5 h-2.5 text-amber-500" />
+              </div>
+              <span>{userLanguage === "sw" ? "TIKETI" : "TICKETS"}</span>
+            </button>
+
+            {/* DAWA */}
+            <button
+              onClick={() => {
+                setSelectedCategory("DAWA");
+                setSelectedDemoPin(null);
+              }}
+              className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer shrink-0 ${
+                selectedCategory === "DAWA"
+                  ? "bg-slate-950 text-white shadow-md scale-105"
+                  : "text-slate-700 hover:bg-slate-100/70 hover:text-slate-950"
+              }`}
+            >
+              <div className="w-4.5 h-4.5 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                <Pill className="w-2.5 h-2.5 text-blue-500" />
+              </div>
+              <span>{userLanguage === "sw" ? "DAWA" : "PHARMACY"}</span>
+            </button>
+          </div>
         </div>
       )}
     </div>

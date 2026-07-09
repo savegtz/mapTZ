@@ -50,8 +50,8 @@ export const mapContainerStyle = {
   height: "100%",
 };
 
-// Default center (Tabata, Dar es Salaam - Nelson Mandela Road area)
+// Default center (Goba, Dar es Salaam)
 export const defaultCenter = {
-  lat: -6.8115,
-  lng: 39.2515,
+  lat: -6.7214,
+  lng: 39.1913,
 };

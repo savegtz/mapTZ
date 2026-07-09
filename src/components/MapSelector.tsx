@@ -6,12 +6,13 @@ import { LocationPin } from "../types";
 
 // Standard landmarks for Swahili/Tanzania locations or custom test presets
 const PRESETS = [
-  { name: "Tabata Dampo Junction", lat: -6.8093, lng: 39.2455, desc: "Kituo maarufu cha mabasi na makutano kando ya barabara ya Nelson Mandela." },
-  { name: "Loyola High School", lat: -6.7972, lng: 39.2458, desc: "Shule maarufu ya Loyola iliyopo Kigogo/Kurasini Road." },
-  { name: "Buguruni Sheli Station", lat: -6.8228, lng: 39.2618, desc: "Kituo kikubwa cha mafuta na biashara kilichopo makutano ya barabara ya Mandela na Uhuru." },
-  { name: "Quality Center Mall", lat: -6.8296, lng: 39.2612, desc: "Kituo cha kisasa cha manunuzi kilichopo barabara ya Nyerere." },
-  { name: "Kigogo Mwisho Bus Stop", lat: -6.8021, lng: 39.2575, desc: "Kituo cha mabasi ya Kigogo Mwisho kando ya mto Msimbazi." },
-  { name: "Tabata Sigara", lat: -6.8188, lng: 39.2315, desc: "Eneo maarufu la viwanda na makazi karibu na kituo cha mitaa ya Tabata." }
+  { name: "Cakezonetz", lat: -6.7198, lng: 39.1905, desc: "Duka la keki na mikate tamu, Goba. Agiza keki za sherehe na harusi hapa.", category: "CHAKULA" },
+  { name: "Mathy chips", lat: -6.7248, lng: 39.1895, desc: "Kaa hapa kupata chipsi tamu, kuku choma na vinywaji baridi katika mazingira safi.", category: "CHAKULA" },
+  { name: "SOMEWHERE HQ", lat: -6.7202, lng: 39.1965, desc: "Ofisi kuu ya Somewhere, huduma za kibiashara na teknolojia.", category: "SOKO" },
+  { name: "Goba Serene Apartments", lat: -6.7275, lng: 39.1942, desc: "Apartment za kisasa na tulivu kwa malazi ya muda mrefu na mfupi.", category: "TIKETI" },
+  { name: "MSANGAI MINI SUPER MARKET", lat: -6.7320, lng: 39.1950, desc: "Supermarket ndogo yenye bidhaa zote za nyumbani, vyakula na vinywaji.", category: "SOKO" },
+  { name: "Goba Pharmacy / Dawa", lat: -6.7230, lng: 39.1870, desc: "Duka la dawa la kisasa lililo wazi masaa 24, liko karibu na barabara kuu.", category: "DAWA" },
+  { name: "Goba Plaza / Tiketi Depot", lat: -6.7260, lng: 39.1980, desc: "Kituo cha kukata tiketi za mabasi, ndege na matukio ya burudani.", category: "TIKETI" }
 ];
 
 interface MapSelectorProps {
@@ -23,6 +24,7 @@ interface MapSelectorProps {
 export default function MapSelector({ onLocationCreated, currentGPS, requestGPS }: MapSelectorProps) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("CHAKULA");
   const [lat, setLat] = useState<number | "">("");
   const [lng, setLng] = useState<number | "">("");
   const [isSaving, setIsSaving] = useState(false);
@@ -50,10 +52,11 @@ export default function MapSelector({ onLocationCreated, currentGPS, requestGPS 
   };
 
   const handleApplyPreset = (preset: typeof PRESETS[0]) => {
-    setName(preset.name.split(" (")[0]);
+    setName(preset.name);
     setLat(preset.lat);
     setLng(preset.lng);
     setDescription(preset.desc);
+    setCategory(preset.category);
     setErrorMsg("");
   };
 
@@ -78,6 +81,8 @@ export default function MapSelector({ onLocationCreated, currentGPS, requestGPS 
         latitude: Number(lat),
         longitude: Number(lng),
         createdAt: Date.now(),
+        businessCategory: category,
+        isBusiness: true,
         audioText: `Unaelekea kwenye eneo la ${name.trim()}. ${description.trim()}`
       };
 
@@ -162,6 +167,22 @@ export default function MapSelector({ onLocationCreated, currentGPS, requestGPS 
             rows={3}
             className="w-full bg-[#0d1322] border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 text-xs focus:outline-none focus:border-cyan-500 focus:bg-slate-900 transition-all resize-none shadow-inner"
           />
+        </div>
+
+        <div>
+          <label className="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wide font-display">
+            Aina ya Eneo / Kundi (Category) *
+          </label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full bg-[#0d1322] border border-slate-800 rounded-xl px-4 py-3 text-white text-xs focus:outline-none focus:border-cyan-500 focus:bg-slate-900 transition-all shadow-inner cursor-pointer"
+          >
+            <option value="CHAKULA">CHAKULA (Chakula na Vinywaji)</option>
+            <option value="SOKO">SOKO (Supermarket / Maduka)</option>
+            <option value="TIKETI">TIKETI (Malazi / Safari / Tiketi)</option>
+            <option value="DAWA">DAWA (Pharmacy / Madawa)</option>
+          </select>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
