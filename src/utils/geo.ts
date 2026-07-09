@@ -50,8 +50,8 @@ export const mapContainerStyle = {
   height: "100%",
 };
 
-// Default center (Tanzania, Dar es Salaam center / National Museum)
+// Default center (Tabata, Dar es Salaam - Nelson Mandela Road area)
 export const defaultCenter = {
-  lat: -6.8185,
-  lng: 39.2905,
+  lat: -6.8115,
+  lng: 39.2515,
 };

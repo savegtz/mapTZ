@@ -6,10 +6,12 @@ import { LocationPin } from "../types";
 
 // Standard landmarks for Swahili/Tanzania locations or custom test presets
 const PRESETS = [
-  { name: "Kariakoo Market (Dar es Salaam)", lat: -6.8185, lng: 39.2783, desc: "Soko la Kariakoo, karibu na duka la jumla." },
-  { name: "Mlimani City Mall Entrance", lat: -6.7702, lng: 39.2241, desc: "Mlangoni mwa maduka makubwa, karibu na benki." },
-  { name: "National Museum Tanzania", lat: -6.8142, lng: 39.2941, desc: "Ndani ya jumba la makumbusho, mkono wa kulia." },
-  { name: "Posta Mpya Bus Stop", lat: -6.8139, lng: 39.2889, desc: "Kituo cha mabasi ya mwendo kasi, kuelekea kivukoni." }
+  { name: "Tabata Dampo Junction", lat: -6.8093, lng: 39.2455, desc: "Kituo maarufu cha mabasi na makutano kando ya barabara ya Nelson Mandela." },
+  { name: "Loyola High School", lat: -6.7972, lng: 39.2458, desc: "Shule maarufu ya Loyola iliyopo Kigogo/Kurasini Road." },
+  { name: "Buguruni Sheli Station", lat: -6.8228, lng: 39.2618, desc: "Kituo kikubwa cha mafuta na biashara kilichopo makutano ya barabara ya Mandela na Uhuru." },
+  { name: "Quality Center Mall", lat: -6.8296, lng: 39.2612, desc: "Kituo cha kisasa cha manunuzi kilichopo barabara ya Nyerere." },
+  { name: "Kigogo Mwisho Bus Stop", lat: -6.8021, lng: 39.2575, desc: "Kituo cha mabasi ya Kigogo Mwisho kando ya mto Msimbazi." },
+  { name: "Tabata Sigara", lat: -6.8188, lng: 39.2315, desc: "Eneo maarufu la viwanda na makazi karibu na kituo cha mitaa ya Tabata." }
 ];
 
 interface MapSelectorProps {

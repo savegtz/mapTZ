@@ -76,7 +76,7 @@ export default function App() {
         
         // Provide standard fallback coordinates if GPS fails or in sandboxed dev environment
         if (!currentGPS) {
-          setCurrentGPS({ lat: -6.8185, lng: 39.2905 }); // Dar es Salaam center
+          setCurrentGPS({ lat: -6.8115, lng: 39.2515 }); // Tabata area, Dar es Salaam
         }
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
